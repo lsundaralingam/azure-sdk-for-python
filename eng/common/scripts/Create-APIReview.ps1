@@ -59,7 +59,8 @@ if ($FindArtifactForApiReviewFn -and (Test-Path "Function:$FindArtifactForApiRev
 }
 else
 {
-    Write-Host "Function 'FindArtifactForApiReviewFn' is not found"
+    Write-Host "Function 'FindArtifactForApiReviewFn' is not found.`
+    Make sure it is present in eng/common/scripts/common.ps1 and eng/scripts/Language-Settings.ps1"
     exit(1)
 }
 
