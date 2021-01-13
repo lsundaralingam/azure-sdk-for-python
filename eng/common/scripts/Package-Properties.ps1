@@ -99,7 +99,8 @@ function Get-PkgProperties
         }
         else
         {
-            LogError "The function '$GetPackageInfoFromRepoFn' was not found."
+            LogError "The function '$GetPackageInfoFromRepoFn' was not found.`
+            Make sure it is present in eng/common/scripts/common.ps1 and eng/scripts/Language-Settings.ps1"
         }
 
         if ($pkgProps -ne $null)

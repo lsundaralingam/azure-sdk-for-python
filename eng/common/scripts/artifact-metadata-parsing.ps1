@@ -99,7 +99,8 @@ function RetrievePackages($artifactLocation) {
   }
   else
   {
-    LogError "The function '$GetPackageInfoFromPackageFileFn' was not found."
+    LogError "The function '$GetPackageInfoFromPackageFileFn' was not found.`
+    Make sure it is present in eng/common/scripts/common.ps1 and eng/scripts/Language-Settings.ps1"
   }
 }
 
