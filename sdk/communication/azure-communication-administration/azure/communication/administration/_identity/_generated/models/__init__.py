@@ -8,18 +8,26 @@
 
 try:
     from ._models_py3 import CommunicationIdentity
-    from ._models_py3 import CommunicationIdentityToken
-    from ._models_py3 import CommunicationIdentityUpdateRequest
-    from ._models_py3 import CommunicationTokenRequest
+    from ._models_py3 import CommunicationIdentityAccessToken
+    from ._models_py3 import CommunicationIdentityAccessTokenRequest
+    from ._models_py3 import CommunicationIdentityAccessTokenResult
+    from ._models_py3 import CommunicationIdentityCreateRequest
 except (SyntaxError, ImportError):
     from ._models import CommunicationIdentity  # type: ignore
-    from ._models import CommunicationIdentityToken  # type: ignore
-    from ._models import CommunicationIdentityUpdateRequest  # type: ignore
-    from ._models import CommunicationTokenRequest  # type: ignore
+    from ._models import CommunicationIdentityAccessToken  # type: ignore
+    from ._models import CommunicationIdentityAccessTokenRequest  # type: ignore
+    from ._models import CommunicationIdentityAccessTokenResult  # type: ignore
+    from ._models import CommunicationIdentityCreateRequest  # type: ignore
+
+from ._communication_identity_client_enums import (
+    CommunicationIdentityTokenScope,
+)
 
 __all__ = [
     'CommunicationIdentity',
-    'CommunicationIdentityToken',
-    'CommunicationIdentityUpdateRequest',
-    'CommunicationTokenRequest',
+    'CommunicationIdentityAccessToken',
+    'CommunicationIdentityAccessTokenRequest',
+    'CommunicationIdentityAccessTokenResult',
+    'CommunicationIdentityCreateRequest',
+    'CommunicationIdentityTokenScope',
 ]
