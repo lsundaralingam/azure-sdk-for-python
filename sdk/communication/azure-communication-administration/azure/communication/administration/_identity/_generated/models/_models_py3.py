@@ -7,7 +7,7 @@
 # --------------------------------------------------------------------------
 
 import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import msrest.serialization
 
@@ -39,27 +39,23 @@ class CommunicationIdentity(msrest.serialization.Model):
         self.id = id
 
 
-class CommunicationIdentityToken(msrest.serialization.Model):
-    """CommunicationIdentityToken.
+class CommunicationIdentityAccessToken(msrest.serialization.Model):
+    """An access token.
 
     All required parameters must be populated in order to send to Azure.
 
-    :param id: Required. Identifier of the identity owning the token.
-    :type id: str
-    :param token: Required. The token issued for the identity.
+    :param token: Required. The access token issued for the identity.
     :type token: str
     :param expires_on: Required. The expiry time of the token.
     :type expires_on: ~datetime.datetime
     """
 
     _validation = {
-        'id': {'required': True},
         'token': {'required': True},
         'expires_on': {'required': True},
     }
 
     _attribute_map = {
-        'id': {'key': 'id', 'type': 'str'},
         'token': {'key': 'token', 'type': 'str'},
         'expires_on': {'key': 'expiresOn', 'type': 'iso-8601'},
     }
@@ -67,45 +63,23 @@ class CommunicationIdentityToken(msrest.serialization.Model):
     def __init__(
         self,
         *,
-        id: str,
         token: str,
         expires_on: datetime.datetime,
         **kwargs
     ):
-        super(CommunicationIdentityToken, self).__init__(**kwargs)
-        self.id = id
+        super(CommunicationIdentityAccessToken, self).__init__(**kwargs)
         self.token = token
         self.expires_on = expires_on
 
 
-class CommunicationIdentityUpdateRequest(msrest.serialization.Model):
-    """CommunicationIdentityUpdateRequest.
-
-    :param tokens_valid_from: All tokens that are issued prior to this time will be revoked.
-    :type tokens_valid_from: ~datetime.datetime
-    """
-
-    _attribute_map = {
-        'tokens_valid_from': {'key': 'tokensValidFrom', 'type': 'iso-8601'},
-    }
-
-    def __init__(
-        self,
-        *,
-        tokens_valid_from: Optional[datetime.datetime] = None,
-        **kwargs
-    ):
-        super(CommunicationIdentityUpdateRequest, self).__init__(**kwargs)
-        self.tokens_valid_from = tokens_valid_from
-
-
-class CommunicationTokenRequest(msrest.serialization.Model):
-    """CommunicationTokenRequest.
+class CommunicationIdentityAccessTokenRequest(msrest.serialization.Model):
+    """CommunicationIdentityAccessTokenRequest.
 
     All required parameters must be populated in order to send to Azure.
 
     :param scopes: Required. List of scopes attached to the token.
-    :type scopes: list[str]
+    :type scopes: list[str or
+     ~azure.communication.administration.models.CommunicationIdentityTokenScope]
     """
 
     _validation = {
@@ -119,8 +93,62 @@ class CommunicationTokenRequest(msrest.serialization.Model):
     def __init__(
         self,
         *,
-        scopes: List[str],
+        scopes: List[Union[str, "CommunicationIdentityTokenScope"]],
         **kwargs
     ):
-        super(CommunicationTokenRequest, self).__init__(**kwargs)
+        super(CommunicationIdentityAccessTokenRequest, self).__init__(**kwargs)
         self.scopes = scopes
+
+
+class CommunicationIdentityAccessTokenResult(msrest.serialization.Model):
+    """A communication identity with access token.
+
+    All required parameters must be populated in order to send to Azure.
+
+    :param identity: Required. A communication identity.
+    :type identity: ~azure.communication.administration.models.CommunicationIdentity
+    :param access_token: An access token.
+    :type access_token: ~azure.communication.administration.models.CommunicationIdentityAccessToken
+    """
+
+    _validation = {
+        'identity': {'required': True},
+    }
+
+    _attribute_map = {
+        'identity': {'key': 'identity', 'type': 'CommunicationIdentity'},
+        'access_token': {'key': 'accessToken', 'type': 'CommunicationIdentityAccessToken'},
+    }
+
+    def __init__(
+        self,
+        *,
+        identity: "CommunicationIdentity",
+        access_token: Optional["CommunicationIdentityAccessToken"] = None,
+        **kwargs
+    ):
+        super(CommunicationIdentityAccessTokenResult, self).__init__(**kwargs)
+        self.identity = identity
+        self.access_token = access_token
+
+
+class CommunicationIdentityCreateRequest(msrest.serialization.Model):
+    """CommunicationIdentityCreateRequest.
+
+    :param create_token_with_scopes: Also create access token for the created identity.
+    :type create_token_with_scopes: list[str or
+     ~azure.communication.administration.models.CommunicationIdentityTokenScope]
+    """
+
+    _attribute_map = {
+        'create_token_with_scopes': {'key': 'createTokenWithScopes', 'type': '[str]'},
+    }
+
+    def __init__(
+        self,
+        *,
+        create_token_with_scopes: Optional[List[Union[str, "CommunicationIdentityTokenScope"]]] = None,
+        **kwargs
+    ):
+        super(CommunicationIdentityCreateRequest, self).__init__(**kwargs)
+        self.create_token_with_scopes = create_token_with_scopes
