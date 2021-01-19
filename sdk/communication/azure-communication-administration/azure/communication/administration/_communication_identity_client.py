@@ -8,7 +8,7 @@ from azure.core.tracing.decorator import distributed_trace
 
 from ._identity._generated._communication_identity_client\
     import CommunicationIdentityClient as CommunicationIdentityClientGen
-from ._identity._generated.models import CommunicationIdentityToken
+from ._identity._generated.models import CommunicationIdentityAccessToken
 from ._shared.utils import parse_connection_str, get_authentication_policy
 from ._shared.models import CommunicationUser
 from ._version import SDK_MONIKER
@@ -82,11 +82,33 @@ class CommunicationIdentityClient(object):
         # type: (...) -> CommunicationUser
         """create a single Communication user
 
-        return: CommunicationUser
-        rtype: ~azure.communication.administration.CommunicationUser
+        :return: CommunicationUser
+        :rtype: ~azure.communication.administration.CommunicationUser
         """
-        return self._identity_service_client.communication_identity.create(
+        return self._identity_service_client.communication_identity.create_identity(
             cls=lambda pr, u, e: CommunicationUser(u.id),
+            **kwargs)
+
+    @distributed_trace
+    def create_user_with_token(
+            self,
+            scopes, # type: List[Union[str, "_model.CommunicationIdentityTokenScope"]]
+            **kwargs # type: Any
+        ):
+        # type: (...) -> Tuple[CommunicationUser, CommunicationIdentityAccessToken]
+        """create a single Communication user with an identity token.
+
+        :param scopes:
+            List of scopes to be added to the token.
+        :type scopes: list[str or 
+            ~azure.communication.administration.models.CommunicationIdentityTokenScope]
+        :return: A CommunicationUser and a CommunicationIdentityToken tuple.
+        :rtype: tuple of (~azure.communication.administration.CommunicationUser,
+         ~azure.communication.administration.CommunicationIdentityToken)
+        """
+        return self._identity_service_client.communication_identity.create_identity(
+            cls=lambda pr, u, e: CommunicationUser(u.id),
+            create_token_with_scopes=scopes,
             **kwargs)
 
     @distributed_trace
@@ -104,28 +126,29 @@ class CommunicationIdentityClient(object):
         :return: None
         :rtype: None
         """
-        self._identity_service_client.communication_identity.delete(
+        self._identity_service_client.communication_identity.delete_identity(
             communication_user.identifier, **kwargs)
 
     @distributed_trace
     def issue_token(
             self,
             user, # type: CommunicationUser
-            scopes, # type: List[str]
+            scopes, # List[Union[str, "_model.CommunicationIdentityTokenScope"]]
             **kwargs # type: Any
         ):
-        # type: (...) -> CommunicationIdentityToken
+        # type: (...) -> CommunicationIdentityAccessToken
         """Generates a new token for an identity.
 
         :param user: Azure Communication User
         :type user: ~azure.communication.administration.CommunicationUser
         :param scopes:
             List of scopes to be added to the token.
-        :type scopes: list[str]
-        :return: CommunicationIdentityToken
-        :rtype: ~azure.communication.administration.CommunicationIdentityToken
+        :type scopes: list[str or 
+            ~azure.communication.administration.models.CommunicationIdentityTokenScope]
+        :return: CommunicationIdentityAccessToken
+        :rtype: ~azure.communication.administration.CommunicationIdentityAccessToken
         """
-        return self._identity_service_client.communication_identity.issue_token(
+        return self._identity_service_client.communication_identity.issue_access_token(
             user.identifier,
             scopes,
             **kwargs)
@@ -134,7 +157,6 @@ class CommunicationIdentityClient(object):
     def revoke_tokens(
             self,
             user, # type: CommunicationUser
-            issued_before=None, # type: Optional[datetime.datetime]
             **kwargs # type: Any
         ):
         # type: (...) -> None
@@ -142,12 +164,9 @@ class CommunicationIdentityClient(object):
 
         :param user: Azure Communication User.
         :type user: ~azure.communication.administration.CommunicationUser.
-        :param issued_before: All tokens that are issued prior to this time should get revoked.
-        :type issued_before: ~datetime.datetime.
         :return: None
         :rtype: None
         """
-        return self._identity_service_client.communication_identity.update(
+        return self._identity_service_client.communication_identity.revoke_access_tokens(
             user.identifier if user else None,
-            tokens_valid_from=issued_before,
             **kwargs)
