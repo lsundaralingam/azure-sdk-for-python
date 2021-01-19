@@ -87,7 +87,7 @@ class CommunicationIdentityClient:
         :return: CommunicationUser
         :rtype: ~azure.communication.administration.CommunicationUser
         """
-        return await self._identity_service_client.communication_identity.create(
+        return await self._identity_service_client.communication_identity.create_identity(
             cls=lambda pr, u, e: CommunicationUser(u.id),
             **kwargs)
 
@@ -103,6 +103,10 @@ class CommunicationIdentityClient:
         :return: A tuple of a CommunicationUser and a CommunicationIdentityAccessToken.
         :rtype: tuple of (~azure.communication.administration.CommunicationUser, ~azure.communication.administration.CommunicationIdentityAccessToken)
         """
+        return await self._identity_service_client.communication_identity.create_identity(
+            create_token_with_scopes=scopes,
+            cls=lambda pr, u, e: CommunicationUser(u.id),
+            **kwargs)
         pass
 
     @distributed_trace_async
@@ -120,7 +124,7 @@ class CommunicationIdentityClient:
         :return: None
         :rtype: None
         """
-        await self._identity_service_client.communication_identity.delete(
+        await self._identity_service_client.communication_identity.delete_identity(
             communication_user.identifier, **kwargs)
 
     @distributed_trace_async
@@ -141,7 +145,7 @@ class CommunicationIdentityClient:
         :return: CommunicationIdentityAccessToken
         :rtype: ~azure.communication.administration.CommunicationIdentityAccessToken
         """
-        return await self._identity_service_client.communication_identity.issue_token(
+        return await self._identity_service_client.communication_identity.issue_access_token(
             user.identifier,
             scopes,
             **kwargs)
@@ -150,7 +154,6 @@ class CommunicationIdentityClient:
     async def revoke_tokens(
             self,
             user, # type: CommunicationUser
-            issued_before=None, # type: Optional[datetime.datetime]
             **kwargs # type: Any
         ):
         # type: (...) -> None
@@ -163,9 +166,8 @@ class CommunicationIdentityClient:
         :return: None
         :rtype: None
         """
-        return await self._identity_service_client.communication_identity.update(
+        return await self._identity_service_client.communication_identity.revoke_access_tokens(
             user.identifier if user else None,
-            tokens_valid_from=issued_before,
             **kwargs)
 
     async def __aenter__(self) -> "CommunicationIdentityClient":
