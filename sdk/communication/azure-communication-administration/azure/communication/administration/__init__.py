@@ -8,8 +8,8 @@ from ._communication_identity_client import CommunicationIdentityClient
 from ._phone_numbers_client import PhoneNumbersClient
 
 from ._identity._generated.models import (
-    CommunicationTokenRequest,
-    CommunicationIdentityToken
+    CommunicationIdentityAccessTokenRequest,
+    CommunicationIdentityAccessToken
 )
 
 from ._phonenumber._generated.models import (
@@ -36,8 +36,8 @@ __all__ = [
     'PhoneNumbersClient',
 
     # from _identity
-    'CommunicationTokenRequest',
-    'CommunicationIdentityToken',
+    'CommunicationIdentityAccessTokenRequest',
+    'CommunicationIdentityAccessToken',
 
     # from _phonenumber
     'AcquiredPhoneNumber',
