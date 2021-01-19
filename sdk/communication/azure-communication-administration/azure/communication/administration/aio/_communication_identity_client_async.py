@@ -100,6 +100,10 @@ class CommunicationIdentityClient:
         # type: (...) -> Tuple[CommunicationUser, CommunicationIdentityAccessToken]
         """create a single Communication user along with an Identity Token
 
+        :param scopes:
+            List of scopes to be added to the token.
+        :type scopes: list[str or 
+            ~azure.communication.administration.models.CommunicationIdentityTokenScope]
         :return: A tuple of a CommunicationUser and a CommunicationIdentityAccessToken.
         :rtype: tuple of (~azure.communication.administration.CommunicationUser, ~azure.communication.administration.CommunicationIdentityAccessToken)
         """
@@ -141,7 +145,8 @@ class CommunicationIdentityClient:
         :type user: ~azure.communication.administration.CommunicationUser
         :param scopes:
             List of scopes to be added to the token.
-        :type scopes: list[str]
+        :type scopes: list[str or 
+            ~azure.communication.administration.models.CommunicationIdentityTokenScope]
         :return: CommunicationIdentityAccessToken
         :rtype: ~azure.communication.administration.CommunicationIdentityAccessToken
         """
@@ -161,8 +166,6 @@ class CommunicationIdentityClient:
 
         :param user: Azure Communication User.
         :type user: ~azure.communication.administration.CommunicationUser
-        :param issued_before: All tokens that are issued prior to this time should get revoked.
-        :type issued_before: ~datetime.datetime
         :return: None
         :rtype: None
         """
@@ -182,4 +185,3 @@ class CommunicationIdentityClient:
         `~azure.communication.administration.aio.CommunicationIdentityClient` session.
         """
         await self._identity_service_client.__aexit__()
-        
