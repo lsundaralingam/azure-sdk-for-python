@@ -111,7 +111,6 @@ class CommunicationIdentityClient:
             create_token_with_scopes=scopes,
             cls=lambda pr, u, e: CommunicationUser(u.id),
             **kwargs)
-        pass
 
     @distributed_trace_async
     async def delete_user(
