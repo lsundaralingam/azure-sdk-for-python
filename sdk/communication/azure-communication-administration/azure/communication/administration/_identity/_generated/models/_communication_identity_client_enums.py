@@ -26,7 +26,7 @@ class _CaseInsensitiveEnumMeta(EnumMeta):
             raise AttributeError(name)
 
 
-class CommunicationIdentityTokenScope(with_metaclass(_CaseInsensitiveEnumMeta, str, Enum)):
+class CommunicationTokenScope(with_metaclass(_CaseInsensitiveEnumMeta, str, Enum)):
     """List of scopes for an access token.
     """
 

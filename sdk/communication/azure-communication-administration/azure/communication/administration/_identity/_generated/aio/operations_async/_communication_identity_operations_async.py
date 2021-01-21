@@ -8,11 +8,11 @@
 from typing import Any, Callable, Dict, Generic, List, Optional, TypeVar, Union
 import warnings
 
-from azure.core.exceptions import ClientAuthenticationError, HttpResponseError, ResourceExistsError, ResourceNotFoundError, map_error
+from azure.core.exceptions import HttpResponseError, ResourceExistsError, ResourceNotFoundError, map_error
 from azure.core.pipeline import PipelineResponse
 from azure.core.pipeline.transport import AsyncHttpResponse, HttpRequest
 
-from ... import models as _models
+from ... import models
 
 T = TypeVar('T')
 ClsType = Optional[Callable[[PipelineResponse[HttpRequest, AsyncHttpResponse], T, Dict[str, Any]], Any]]
@@ -31,7 +31,7 @@ class CommunicationIdentityOperations:
     :param deserializer: An object model deserializer.
     """
 
-    models = _models
+    models = models
 
     def __init__(self, client, config, serializer, deserializer) -> None:
         self._client = client
@@ -41,30 +41,27 @@ class CommunicationIdentityOperations:
 
     async def create_identity(
         self,
-        create_token_with_scopes: Optional[List[Union[str, "_models.CommunicationIdentityTokenScope"]]] = None,
+        create_token_with_scopes: Optional[List[Union[str, "models.CommunicationTokenScope"]]] = None,
         **kwargs
-    ) -> "_models.CommunicationIdentityAccessTokenResult":
+    ) -> "models.CommunicationIdentityAccessTokenResult":
         """Create a new identity.
 
         Create a new identity.
 
         :param create_token_with_scopes: Also create access token for the created identity.
-        :type create_token_with_scopes: list[str or ~azure.communication.administration.models.CommunicationIdentityTokenScope]
+        :type create_token_with_scopes: list[str or ~azure.communication.administration.models.CommunicationTokenScope]
         :keyword callable cls: A custom type or function that will be passed the direct response
         :return: CommunicationIdentityAccessTokenResult, or the result of cls(response)
         :rtype: ~azure.communication.administration.models.CommunicationIdentityAccessTokenResult
         :raises: ~azure.core.exceptions.HttpResponseError
         """
-        cls = kwargs.pop('cls', None)  # type: ClsType["_models.CommunicationIdentityAccessTokenResult"]
-        error_map = {
-            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError
-        }
+        cls = kwargs.pop('cls', None)  # type: ClsType["models.CommunicationIdentityAccessTokenResult"]
+        error_map = {404: ResourceNotFoundError, 409: ResourceExistsError}
         error_map.update(kwargs.pop('error_map', {}))
 
-        _body = _models.CommunicationIdentityCreateRequest(create_token_with_scopes=create_token_with_scopes)
+        _body = models.CommunicationIdentityCreateRequest(create_token_with_scopes=create_token_with_scopes)
         api_version = "2021-03-07"
         content_type = kwargs.pop("content_type", "application/json")
-        accept = "application/json"
 
         # Construct URL
         url = self.create_identity.metadata['url']  # type: ignore
@@ -80,7 +77,7 @@ class CommunicationIdentityOperations:
         # Construct headers
         header_parameters = {}  # type: Dict[str, Any]
         header_parameters['Content-Type'] = self._serialize.header("content_type", content_type, 'str')
-        header_parameters['Accept'] = self._serialize.header("accept", accept, 'str')
+        header_parameters['Accept'] = 'application/json'
 
         body_content_kwargs = {}  # type: Dict[str, Any]
         if _body is not None:
@@ -89,6 +86,7 @@ class CommunicationIdentityOperations:
             body_content = None
         body_content_kwargs['content'] = body_content
         request = self._client.post(url, query_parameters, header_parameters, **body_content_kwargs)
+
         pipeline_response = await self._client._pipeline.run(request, stream=False, **kwargs)
         response = pipeline_response.http_response
 
@@ -121,9 +119,7 @@ class CommunicationIdentityOperations:
         :raises: ~azure.core.exceptions.HttpResponseError
         """
         cls = kwargs.pop('cls', None)  # type: ClsType[None]
-        error_map = {
-            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError
-        }
+        error_map = {404: ResourceNotFoundError, 409: ResourceExistsError}
         error_map.update(kwargs.pop('error_map', {}))
         api_version = "2021-03-07"
 
@@ -172,9 +168,7 @@ class CommunicationIdentityOperations:
         :raises: ~azure.core.exceptions.HttpResponseError
         """
         cls = kwargs.pop('cls', None)  # type: ClsType[None]
-        error_map = {
-            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError
-        }
+        error_map = {404: ResourceNotFoundError, 409: ResourceExistsError}
         error_map.update(kwargs.pop('error_map', {}))
         api_version = "2021-03-07"
 
@@ -209,9 +203,9 @@ class CommunicationIdentityOperations:
     async def issue_access_token(
         self,
         id: str,
-        scopes: List[Union[str, "_models.CommunicationIdentityTokenScope"]],
+        scopes: List[Union[str, "models.CommunicationTokenScope"]],
         **kwargs
-    ) -> "_models.CommunicationIdentityAccessToken":
+    ) -> "models.CommunicationUserToken":
         """Issue a new token for an identity.
 
         Issue a new token for an identity.
@@ -219,22 +213,19 @@ class CommunicationIdentityOperations:
         :param id: Identifier of the identity to issue token for.
         :type id: str
         :param scopes: List of scopes attached to the token.
-        :type scopes: list[str or ~azure.communication.administration.models.CommunicationIdentityTokenScope]
+        :type scopes: list[str or ~azure.communication.administration.models.CommunicationTokenScope]
         :keyword callable cls: A custom type or function that will be passed the direct response
-        :return: CommunicationIdentityAccessToken, or the result of cls(response)
-        :rtype: ~azure.communication.administration.models.CommunicationIdentityAccessToken
+        :return: CommunicationUserToken, or the result of cls(response)
+        :rtype: ~azure.communication.administration.models.CommunicationUserToken
         :raises: ~azure.core.exceptions.HttpResponseError
         """
-        cls = kwargs.pop('cls', None)  # type: ClsType["_models.CommunicationIdentityAccessToken"]
-        error_map = {
-            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError
-        }
+        cls = kwargs.pop('cls', None)  # type: ClsType["models.CommunicationUserToken"]
+        error_map = {404: ResourceNotFoundError, 409: ResourceExistsError}
         error_map.update(kwargs.pop('error_map', {}))
 
-        _body = _models.CommunicationIdentityAccessTokenRequest(scopes=scopes)
+        _body = models.CommunicationIdentityAccessTokenRequest(scopes=scopes)
         api_version = "2021-03-07"
         content_type = kwargs.pop("content_type", "application/json")
-        accept = "application/json"
 
         # Construct URL
         url = self.issue_access_token.metadata['url']  # type: ignore
@@ -251,12 +242,13 @@ class CommunicationIdentityOperations:
         # Construct headers
         header_parameters = {}  # type: Dict[str, Any]
         header_parameters['Content-Type'] = self._serialize.header("content_type", content_type, 'str')
-        header_parameters['Accept'] = self._serialize.header("accept", accept, 'str')
+        header_parameters['Accept'] = 'application/json'
 
         body_content_kwargs = {}  # type: Dict[str, Any]
         body_content = self._serialize.body(_body, 'CommunicationIdentityAccessTokenRequest')
         body_content_kwargs['content'] = body_content
         request = self._client.post(url, query_parameters, header_parameters, **body_content_kwargs)
+
         pipeline_response = await self._client._pipeline.run(request, stream=False, **kwargs)
         response = pipeline_response.http_response
 
@@ -264,7 +256,7 @@ class CommunicationIdentityOperations:
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             raise HttpResponseError(response=response)
 
-        deserialized = self._deserialize('CommunicationIdentityAccessToken', pipeline_response)
+        deserialized = self._deserialize('CommunicationUserToken', pipeline_response)
 
         if cls:
             return cls(pipeline_response, deserialized, {})

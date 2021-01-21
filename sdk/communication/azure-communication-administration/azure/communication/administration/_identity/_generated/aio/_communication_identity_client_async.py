@@ -11,8 +11,8 @@ from typing import Any
 from azure.core import AsyncPipelineClient
 from msrest import Deserializer, Serializer
 
-from ._configuration import CommunicationIdentityClientConfiguration
-from .operations import CommunicationIdentityOperations
+from ._configuration_async import CommunicationIdentityClientConfiguration
+from .operations_async import CommunicationIdentityOperations
 from .. import models
 
 
@@ -20,7 +20,7 @@ class CommunicationIdentityClient(object):
     """Azure Communication Identity Service.
 
     :ivar communication_identity: CommunicationIdentityOperations operations
-    :vartype communication_identity: azure.communication.administration.aio.operations.CommunicationIdentityOperations
+    :vartype communication_identity: azure.communication.administration.aio.operations_async.CommunicationIdentityOperations
     :param endpoint: The communication resource, for example https://my-resource.communication.azure.com.
     :type endpoint: str
     """
