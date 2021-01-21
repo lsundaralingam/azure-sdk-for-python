@@ -9,7 +9,7 @@ from ._phone_numbers_client import PhoneNumbersClient
 
 from ._identity._generated.models import (
     CommunicationIdentityAccessTokenRequest,
-    CommunicationIdentityAccessToken
+    CommunicationUserToken
 )
 
 from ._phonenumber._generated.models import (
