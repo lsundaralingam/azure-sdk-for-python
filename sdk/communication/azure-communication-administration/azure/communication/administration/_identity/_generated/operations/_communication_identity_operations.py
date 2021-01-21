@@ -45,7 +45,7 @@ class CommunicationIdentityOperations(object):
 
     def create_identity(
         self,
-        create_token_with_scopes=None,  # type: Optional[List[Union[str, "_models.CommunicationIdentityTokenScope"]]]
+        create_token_with_scopes=None,  # type: Optional[List[Union[str, "_models.CommunicationTokenScope"]]]
         **kwargs  # type: Any
     ):
         # type: (...) -> "_models.CommunicationIdentityAccessTokenResult"
@@ -54,7 +54,7 @@ class CommunicationIdentityOperations(object):
         Create a new identity.
 
         :param create_token_with_scopes: Also create access token for the created identity.
-        :type create_token_with_scopes: list[str or ~azure.communication.administration.models.CommunicationIdentityTokenScope]
+        :type create_token_with_scopes: list[str or ~azure.communication.administration.models.CommunicationTokenScope]
         :keyword callable cls: A custom type or function that will be passed the direct response
         :return: CommunicationIdentityAccessTokenResult, or the result of cls(response)
         :rtype: ~azure.communication.administration.models.CommunicationIdentityAccessTokenResult
@@ -216,10 +216,10 @@ class CommunicationIdentityOperations(object):
     def issue_access_token(
         self,
         id,  # type: str
-        scopes,  # type: List[Union[str, "_models.CommunicationIdentityTokenScope"]]
+        scopes,  # type: List[Union[str, "_models.CommunicationTokenScope"]]
         **kwargs  # type: Any
     ):
-        # type: (...) -> "_models.CommunicationIdentityAccessToken"
+        # type: (...) -> "_models.CommunicationUserToken"
         """Issue a new token for an identity.
 
         Issue a new token for an identity.
@@ -227,13 +227,13 @@ class CommunicationIdentityOperations(object):
         :param id: Identifier of the identity to issue token for.
         :type id: str
         :param scopes: List of scopes attached to the token.
-        :type scopes: list[str or ~azure.communication.administration.models.CommunicationIdentityTokenScope]
+        :type scopes: list[str or ~azure.communication.administration.models.CommunicationTokenScope]
         :keyword callable cls: A custom type or function that will be passed the direct response
-        :return: CommunicationIdentityAccessToken, or the result of cls(response)
-        :rtype: ~azure.communication.administration.models.CommunicationIdentityAccessToken
+        :return: CommunicationUserToken, or the result of cls(response)
+        :rtype: ~azure.communication.administration.models.CommunicationUserToken
         :raises: ~azure.core.exceptions.HttpResponseError
         """
-        cls = kwargs.pop('cls', None)  # type: ClsType["_models.CommunicationIdentityAccessToken"]
+        cls = kwargs.pop('cls', None)  # type: ClsType["_models.CommunicationUserToken"]
         error_map = {
             401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError
         }
@@ -272,7 +272,7 @@ class CommunicationIdentityOperations(object):
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             raise HttpResponseError(response=response)
 
-        deserialized = self._deserialize('CommunicationIdentityAccessToken', pipeline_response)
+        deserialized = self._deserialize('CommunicationUserToken', pipeline_response)
 
         if cls:
             return cls(pipeline_response, deserialized, {})

@@ -25,3 +25,21 @@ clear-output-folder: true
 v3: true
 python: true
 ```
+
+### Rename CommunicationIdentityAccessToken to CommunicationUserToken
+
+``` yaml
+directive:
+    - rename-model:
+        from: CommunicationIdentityAccessToken
+        to: CommunicationUserToken
+```
+
+### Rename CommunicationIdentityTokenScope to CommunicationTokenScope
+```yaml
+directive:
+  - from: swagger-document
+    where: $.definitions.CommunicationIdentityTokenScope
+    transform: >
+      $["x-ms-enum"].name = "CommunicationTokenScope";
+```

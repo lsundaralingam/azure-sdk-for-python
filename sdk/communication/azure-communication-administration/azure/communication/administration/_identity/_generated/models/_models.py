@@ -34,44 +34,13 @@ class CommunicationIdentity(msrest.serialization.Model):
         self.id = kwargs['id']
 
 
-class CommunicationIdentityAccessToken(msrest.serialization.Model):
-    """An access token.
-
-    All required parameters must be populated in order to send to Azure.
-
-    :param token: Required. The access token issued for the identity.
-    :type token: str
-    :param expires_on: Required. The expiry time of the token.
-    :type expires_on: ~datetime.datetime
-    """
-
-    _validation = {
-        'token': {'required': True},
-        'expires_on': {'required': True},
-    }
-
-    _attribute_map = {
-        'token': {'key': 'token', 'type': 'str'},
-        'expires_on': {'key': 'expiresOn', 'type': 'iso-8601'},
-    }
-
-    def __init__(
-        self,
-        **kwargs
-    ):
-        super(CommunicationIdentityAccessToken, self).__init__(**kwargs)
-        self.token = kwargs['token']
-        self.expires_on = kwargs['expires_on']
-
-
 class CommunicationIdentityAccessTokenRequest(msrest.serialization.Model):
     """CommunicationIdentityAccessTokenRequest.
 
     All required parameters must be populated in order to send to Azure.
 
     :param scopes: Required. List of scopes attached to the token.
-    :type scopes: list[str or
-     ~azure.communication.administration.models.CommunicationIdentityTokenScope]
+    :type scopes: list[str or ~azure.communication.administration.models.CommunicationTokenScope]
     """
 
     _validation = {
@@ -98,7 +67,7 @@ class CommunicationIdentityAccessTokenResult(msrest.serialization.Model):
     :param identity: Required. A communication identity.
     :type identity: ~azure.communication.administration.models.CommunicationIdentity
     :param access_token: An access token.
-    :type access_token: ~azure.communication.administration.models.CommunicationIdentityAccessToken
+    :type access_token: ~azure.communication.administration.models.CommunicationUserToken
     """
 
     _validation = {
@@ -107,7 +76,7 @@ class CommunicationIdentityAccessTokenResult(msrest.serialization.Model):
 
     _attribute_map = {
         'identity': {'key': 'identity', 'type': 'CommunicationIdentity'},
-        'access_token': {'key': 'accessToken', 'type': 'CommunicationIdentityAccessToken'},
+        'access_token': {'key': 'accessToken', 'type': 'CommunicationUserToken'},
     }
 
     def __init__(
@@ -124,7 +93,7 @@ class CommunicationIdentityCreateRequest(msrest.serialization.Model):
 
     :param create_token_with_scopes: Also create access token for the created identity.
     :type create_token_with_scopes: list[str or
-     ~azure.communication.administration.models.CommunicationIdentityTokenScope]
+     ~azure.communication.administration.models.CommunicationTokenScope]
     """
 
     _attribute_map = {
@@ -137,3 +106,33 @@ class CommunicationIdentityCreateRequest(msrest.serialization.Model):
     ):
         super(CommunicationIdentityCreateRequest, self).__init__(**kwargs)
         self.create_token_with_scopes = kwargs.get('create_token_with_scopes', None)
+
+
+class CommunicationUserToken(msrest.serialization.Model):
+    """An access token.
+
+    All required parameters must be populated in order to send to Azure.
+
+    :param token: Required. The access token issued for the identity.
+    :type token: str
+    :param expires_on: Required. The expiry time of the token.
+    :type expires_on: ~datetime.datetime
+    """
+
+    _validation = {
+        'token': {'required': True},
+        'expires_on': {'required': True},
+    }
+
+    _attribute_map = {
+        'token': {'key': 'token', 'type': 'str'},
+        'expires_on': {'key': 'expiresOn', 'type': 'iso-8601'},
+    }
+
+    def __init__(
+        self,
+        **kwargs
+    ):
+        super(CommunicationUserToken, self).__init__(**kwargs)
+        self.token = kwargs['token']
+        self.expires_on = kwargs['expires_on']
