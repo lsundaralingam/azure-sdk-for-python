@@ -37,7 +37,7 @@ __all__ = [
 
     # from _identity
     'CommunicationIdentityAccessTokenRequest',
-    'CommunicationIdentityAccessToken',
+    'CommunicationUserToken',
 
     # from _phonenumber
     'AcquiredPhoneNumber',
